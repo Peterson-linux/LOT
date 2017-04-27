@@ -6,7 +6,7 @@ from django import forms
 from models import User
 
 #表单
-class UserForm(forms.Form):
+class UserForm(forms.Form): 
     username = forms.CharField(label='用户名',max_length=100)
     password = forms.CharField(label='密码',widget=forms.PasswordInput())
     email = forms.EmailField(label='电子邮件')
@@ -27,7 +27,7 @@ def regist(req):
             email = uf.cleaned_data['email']
             #添加到数据库
             User.objects.create(username= username,password=password,email=email)
-            return HttpResponse('regist success!!')
+            return HttpResponseRedirect('/account/login/')
     else:
         uf = UserForm()
     return render_to_response('regist.html',{'uf':uf})
@@ -65,4 +65,5 @@ def logout(req):
     response = HttpResponse('logout !!')
     #清理cookie里保存username
     response.delete_cookie('username')
-    return response
+    return HttpResponseRedirect('/account/login/')
+
